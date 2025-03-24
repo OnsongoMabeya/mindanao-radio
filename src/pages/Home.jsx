@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import Section from '../components/Section';
+import About from './About';
+import Services from './Services';
+import Contact from './Contact';
 
 export default function Home() {
     return (
@@ -15,18 +18,18 @@ export default function Home() {
                 Your Voice in Mindanao - Connecting Communities Through Radio
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                to="/about"
+                <a
+                href="#about"
                 className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-medium transition-colors"
                 >
                 Learn More
-                </Link>
-                <Link
-                to="/contact"
+                </a>
+                <a
+                href="#contact"
                 className="bg-transparent border-2 border-primary text-primary hover:bg-primary/10 px-8 py-3 rounded-lg font-medium transition-colors"
                 >
                 Contact Us
-                </Link>
+                </a>
             </div>
             </div>
         </section>
@@ -54,6 +57,21 @@ export default function Home() {
             </div>
             </div>
         </Section>
+
+        {/* About Section */}
+        <div id="about">
+            <About />
+        </div>
+
+        {/* Services Section */}
+        <div id="services">
+            <Services />
+        </div>
+
+        {/* Contact Section */}
+        <div id="contact">
+            <Contact />
+        </div>
         </div>
     );
 } 
