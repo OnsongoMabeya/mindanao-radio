@@ -1,76 +1,97 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { Box, Container, Typography, Button, Card, CardContent, Grid, AppBar, Toolbar, IconButton, useScrollTrigger } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from './components/Navbar';
-import AudioPlayer from './components/AudioPlayer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
+import AudioPlayer from './components/AudioPlayer';
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  background: 'rgba(26, 26, 26, 0.8)',
-  backdropFilter: 'blur(8px)',
-  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-}));
-
-const GlassCard = styled(Card)(({ theme }) => ({
-  background: 'rgba(26, 26, 26, 0.5)',
-  backdropFilter: 'blur(8px)',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
-  transition: 'all 0.3s ease-in-out',
-  '&:hover': {
-    borderColor: theme.palette.primary.main,
-    boxShadow: `0 4px 12px ${theme.palette.primary.main}20`,
-  },
-}));
-
-const GradientText = styled(Typography)(({ theme }) => ({
-  background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-}));
-
-function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-}
+// Create theme instance
+const theme = createTheme({
+    palette: {
+        mode: 'dark',
+        primary: {
+            main: '#FF6B6B',
+            light: '#FF8E8E',
+            dark: '#E64A4A',
+        },
+        secondary: {
+            main: '#4ECDC4',
+            light: '#7EDCD6',
+            dark: '#45B7AE',
+        },
+        background: {
+            default: '#121212',
+            paper: '#1E1E1E',
+        },
+    },
+    typography: {
+        fontFamily: '"Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
+        h1: {
+            fontSize: '3.5rem',
+            fontWeight: 700,
+        },
+        h2: {
+            fontSize: '2.5rem',
+            fontWeight: 600,
+        },
+        h3: {
+            fontSize: '2rem',
+            fontWeight: 600,
+        },
+        h4: {
+            fontSize: '1.75rem',
+            fontWeight: 500,
+        },
+        h5: {
+            fontSize: '1.5rem',
+            fontWeight: 500,
+        },
+        h6: {
+            fontSize: '1.25rem',
+            fontWeight: 500,
+        },
+        body1: {
+            fontSize: '1rem',
+            lineHeight: 1.7,
+        },
+    },
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    textTransform: 'none',
+                    borderRadius: 8,
+                    padding: '8px 24px',
+                    fontWeight: 500,
+                },
+            },
+        },
+    },
+});
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-  });
-
-  const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  return (
-    <Router>
-      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <ScrollToTop />
-        <Navbar />
-        <Box component="main" sx={{ flexGrow: 1, pt: 8 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </Box>
-        <AudioPlayer />
-      </Box>
-    </Router>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                    <Navbar />
+                    <main style={{ flex: 1 }}>
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/services" element={<Services />} />
+                            <Route path="/contact" element={<Contact />} />
+                        </Routes>
+                    </main>
+                    <AudioPlayer />
+                </div>
+            </Router>
+        </ThemeProvider>
+    );
 }
 
 export default App;

@@ -6,6 +6,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { useForm, ValidationError } from '@formspree/react';
 
 const GradientText = styled(Typography)(({ theme }) => ({
     background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
@@ -55,7 +56,23 @@ const socialLinks = [
 
 function Contact() {
     const theme = useTheme();
+    const formId = 'meoaklng';
+    const [state, handleSubmit] = useForm(formId);
     
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        
+        try {
+            await handleSubmit(e);
+            if (state.succeeded) {
+                e.target.reset();
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+        }
+    };
+
     return (
         <Box sx={{ pt: 8 }}>
         {/* Hero Section */}
@@ -164,70 +181,93 @@ function Contact() {
                     Have questions or feedback? We'd love to hear from you.
                     </Typography>
                 </Box>
-                <Box component="form" noValidate sx={{ mt: 3 }}>
+                <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                        required
-                        fullWidth
-                        label="First Name"
-                        variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                        required
-                        fullWidth
-                        label="Last Name"
-                        variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                        required
-                        fullWidth
-                        label="Email"
-                        type="email"
-                        variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                        required
-                        fullWidth
-                        label="Subject"
-                        variant="outlined"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                        required
-                        fullWidth
-                        label="Message"
-                        multiline
-                        rows={4}
-                        variant="outlined"
-                        />
-                    </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                fullWidth
+                                label="First Name"
+                                name="name"
+                                variant="outlined"
+                                disabled={state.submitting}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                required
+                                fullWidth
+                                label="Last Name"
+                                name="lastName"
+                                variant="outlined"
+                                disabled={state.submitting}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                label="Email"
+                                name="email"
+                                type="email"
+                                variant="outlined"
+                                disabled={state.submitting}
+                            />
+                            <ValidationError prefix="Email" field="email" errors={state.errors} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                label="Subject"
+                                name="subject"
+                                variant="outlined"
+                                disabled={state.submitting}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                label="Message"
+                                name="message"
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                disabled={state.submitting}
+                            />
+                            <ValidationError prefix="Message" field="message" errors={state.errors} />
+                        </Grid>
                     </Grid>
                     <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    fullWidth
-                    sx={{
-                        mt: 3,
-                        borderRadius: 2,
-                        py: 1.5,
-                        background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
-                        '&:hover': {
-                        background: `linear-gradient(45deg, ${theme.palette.primary.dark} 30%, ${theme.palette.secondary.dark} 90%)`,
-                        },
-                    }}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        fullWidth
+                        disabled={state.submitting}
+                        sx={{
+                            mt: 3,
+                            borderRadius: 2,
+                            py: 1.5,
+                            background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
+                            '&:hover': {
+                                background: `linear-gradient(45deg, ${theme.palette.primary.dark} 30%, ${theme.palette.secondary.dark} 90%)`,
+                            },
+                        }}
                     >
-                    Send Message
+                        {state.submitting ? 'Sending...' : 'Send Message'}
                     </Button>
+                    {state.errors && state.errors.length > 0 && (
+                        <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
+                            There was an error submitting the form. Please try again.
+                        </Typography>
+                    )}
+                    {state.succeeded && (
+                        <Typography color="success.main" sx={{ mt: 2, textAlign: 'center' }}>
+                            Thank you for your message! We'll get back to you soon.
+                        </Typography>
+                    )}
                 </Box>
                 </GlassCard>
             </Grid>
