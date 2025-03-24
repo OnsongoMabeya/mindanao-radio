@@ -1,11 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Box, Container, Typography, Button, Card, CardContent, Grid, AppBar, Toolbar, IconButton, useScrollTrigger } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import theme from './theme';
 import Navbar from './components/Navbar';
 import AudioPlayer from './components/AudioPlayer';
 import Home from './pages/Home';
@@ -58,24 +55,21 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-          <ScrollToTop />
-          <Navbar />
-          <Box component="main" sx={{ flexGrow: 1, pt: 8 }}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </Box>
-          <AudioPlayer />
+    <Router>
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <ScrollToTop />
+        <Navbar />
+        <Box component="main" sx={{ flexGrow: 1, pt: 8 }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
         </Box>
-      </Router>
-    </ThemeProvider>
+        <AudioPlayer />
+      </Box>
+    </Router>
   );
 }
 
