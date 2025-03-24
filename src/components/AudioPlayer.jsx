@@ -1,71 +1,162 @@
 import { useState, useRef, useEffect } from 'react';
-import { FaPlay, FaPause } from 'react-icons/fa';
+import {
+  Paper,
+  IconButton,
+  Slider,
+  Box,
+  Typography,
+  useTheme,
+  styled,
+} from '@mui/material';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
-export default function AudioPlayer() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const audioRef = useRef(null);
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  padding: theme.spacing(2),
+  background: 'rgba(26, 26, 26, 0.8)',
+  backdropFilter: 'blur(8px)',
+  borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+  zIndex: 1000,
+}));
 
-    useEffect(() => {
-        audioRef.current = new Audio('http://stream.zeno.fm/eezdhp4yx1zuv');
-        
-        audioRef.current.addEventListener('canplay', () => {
-        setIsLoading(false);
-        });
+const StyledSlider = styled(Slider)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  '& .MuiSlider-thumb': {
+    '&:hover, &.Mui-focusVisible': {
+      boxShadow: `0 0 0 8px ${theme.palette.primary.main}20`,
+    },
+    '&.Mui-active': {
+      boxShadow: `0 0 0 8px ${theme.palette.primary.main}20`,
+    },
+  },
+}));
 
-        audioRef.current.addEventListener('error', () => {
-        setIsLoading(false);
-        console.error('Error loading audio stream');
-        });
+function AudioPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null);
+  const theme = useTheme();
 
-        return () => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current = null;
-        }
-        };
-    }, []);
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.addEventListener('timeupdate', handleTimeUpdate);
+      audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+      return () => {
+        audio.removeEventListener('timeupdate', handleTimeUpdate);
+        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      };
+    }
+  }, []);
 
-    const togglePlay = () => {
-        if (!audioRef.current) return;
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
 
-        if (isPlaying) {
+  const handleLoadedMetadata = () => {
+    setDuration(audioRef.current.duration);
+  };
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
         audioRef.current.pause();
-        } else {
+      } else {
         audioRef.current.play();
-        }
-        setIsPlaying(!isPlaying);
-    };
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
-    return (
-        <div className="fixed bottom-0 left-0 right-0 bg-dark-bg border-t border-gray-800 p-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-            <button
-                onClick={togglePlay}
-                disabled={isLoading}
-                className="bg-primary hover:bg-primary/90 text-white rounded-full p-3 transition-colors disabled:opacity-50"
-            >
-                {isPlaying ? <FaPause className="h-5 w-5" /> : <FaPlay className="h-5 w-5" />}
-            </button>
-            <div>
-                <h3 className="text-dark-text font-medium">Mindanao Radio</h3>
-                <p className="text-dark-text-secondary text-sm">Live Stream</p>
-            </div>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-            {isPlaying && (
-                <span className="flex items-center text-secondary">
-                <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
-                </span>
-                <span className="ml-2 text-sm font-medium">LIVE</span>
-                </span>
-            )}
-            </div>
-        </div>
-        </div>
-    );
-} 
+  const handleTimeChange = (event, newValue) => {
+    setCurrentTime(newValue);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newValue;
+    }
+  };
+
+  const handleVolumeChange = (event, newValue) => {
+    setVolume(newValue);
+    if (audioRef.current) {
+      audioRef.current.volume = newValue;
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <>
+      <audio
+        ref={audioRef}
+        src="YOUR_AUDIO_STREAM_URL"
+        preload="metadata"
+      />
+      <StyledPaper elevation={3}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton onClick={togglePlay} color="primary">
+            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+          </IconButton>
+          
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="body2" color="text.secondary">
+                {formatTime(currentTime)}
+              </Typography>
+              <StyledSlider
+                value={currentTime}
+                onChange={handleTimeChange}
+                max={duration}
+                aria-label="time-indicator"
+                size="small"
+              />
+              <Typography variant="body2" color="text.secondary">
+                {formatTime(duration)}
+              </Typography>
+            </Box>
+            <Typography variant="subtitle2" noWrap>
+              Now Playing: Mindanao Radio Live Stream
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <IconButton onClick={toggleMute} color="primary">
+              {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+            </IconButton>
+            <StyledSlider
+              value={volume}
+              onChange={handleVolumeChange}
+              min={0}
+              max={1}
+              step={0.01}
+              aria-label="volume-slider"
+              size="small"
+              sx={{ width: 100 }}
+            />
+          </Box>
+        </Box>
+      </StyledPaper>
+    </>
+  );
+}
+
+export default AudioPlayer; 

@@ -1,77 +1,173 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+  useTheme,
+  useMediaQuery,
+  Container,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { styled } from '@mui/material/styles';
 
-export default function Navbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  background: 'rgba(26, 26, 26, 0.8)',
+  backdropFilter: 'blur(8px)',
+  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+  boxShadow: 'none',
+}));
 
-    const navLinks = [
-        { name: 'Home', path: '/' },
-        { name: 'About', path: '/#about' },
-        { name: 'Services', path: '/#services' },
-        { name: 'Contact', path: '/#contact' },
-    ];
+const StyledButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  margin: theme.spacing(0, 1),
+  '&:hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+}));
 
-    return (
-        <nav className="bg-dark-bg text-dark-text fixed w-full z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-            <div className="flex-shrink-0">
-                <Link to="/" className="flex items-center">
-                <img
-                    className="h-12 w-auto"
-                    src="/media/logo.png"
-                    alt="Mindanao Radio"
-                />
-                </Link>
-            </div>
-            
-            {/* Desktop menu */}
-            <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
-                {navLinks.map((link) => (
-                    <Link
-                    key={link.name}
-                    to={link.path}
-                    className="text-dark-text-secondary hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                    >
-                    {link.name}
-                    </Link>
-                ))}
-                </div>
-            </div>
+const NavLink = styled('a')(({ theme }) => ({
+  color: theme.palette.text.primary,
+  textDecoration: 'none',
+  cursor: 'pointer',
+  '&:hover': {
+    color: theme.palette.primary.main,
+  },
+}));
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-                <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-dark-text-secondary hover:text-white focus:outline-none"
+const navItems = [
+  { text: 'Home', sectionId: 'home' },
+  { text: 'About', sectionId: 'about' },
+  { text: 'Services', sectionId: 'services' },
+  { text: 'Contact', sectionId: 'contact' },
+];
+
+function Navbar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setMobileOpen(false);
+  };
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', pt: 2 }}>
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Mindanao Radio
+      </Typography>
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemText
+              primary={
+                <NavLink
+                  onClick={() => scrollToSection(item.sectionId)}
+                  sx={{
+                    color: location.hash === `#${item.sectionId}` ? theme.palette.primary.main : 'inherit',
+                    display: 'block',
+                    width: '100%',
+                    padding: theme.spacing(1, 2),
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    },
+                  }}
                 >
-                {isMenuOpen ? (
-                    <FaTimes className="h-6 w-6" />
-                ) : (
-                    <FaBars className="h-6 w-6" />
-                )}
-                </button>
-            </div>
-            </div>
-        </div>
+                  {item.text}
+                </NavLink>
+              }
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
-        {/* Mobile menu */}
-        <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navLinks.map((link) => (
-                <Link
-                key={link.name}
-                to={link.path}
-                className="text-dark-text-secondary hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+  return (
+    <>
+      <StyledAppBar position="fixed">
+        <Container maxWidth="lg">
+          <Toolbar disableGutters>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              component={RouterLink}
+              to="/"
+              onClick={() => scrollToSection('home')}
+              sx={{
+                flexGrow: 1,
+                display: { xs: 'none', sm: 'block' },
+                textDecoration: 'none',
+                color: 'inherit',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              Mindanao Radio
+            </Typography>
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              {navItems.map((item) => (
+                <StyledButton
+                  key={item.text}
+                  onClick={() => scrollToSection(item.sectionId)}
+                  sx={{
+                    color: location.hash === `#${item.sectionId}` ? theme.palette.primary.main : 'inherit',
+                  }}
                 >
-                {link.name}
-                </Link>
-            ))}
-            </div>
-        </div>
-        </nav>
-    );
-} 
+                  {item.text}
+                </StyledButton>
+              ))}
+            </Box>
+          </Toolbar>
+        </Container>
+      </StyledAppBar>
+      <Box component="nav">
+        <Drawer
+          variant="temporary"
+          anchor="right"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: 240,
+              backgroundColor: theme.palette.background.default,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+    </>
+  );
+}
+
+export default Navbar; 

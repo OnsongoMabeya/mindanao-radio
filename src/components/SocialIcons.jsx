@@ -1,41 +1,43 @@
-import { FaFacebook, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { IconButton } from '@mui/material';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 
 const socialLinks = [
     {
         name: 'Facebook',
-        icon: FaFacebook,
         url: 'https://facebook.com/mindanaoradio',
-        color: 'hover:text-blue-500',
+        icon: <FacebookIcon />,
     },
     {
         name: 'Twitter',
-        icon: FaTwitter,
         url: 'https://twitter.com/mindanaoradio',
-        color: 'hover:text-blue-400',
+        icon: <TwitterIcon />,
     },
     {
         name: 'YouTube',
-        icon: FaYoutube,
         url: 'https://youtube.com/mindanaoradio',
-        color: 'hover:text-red-500',
+        icon: <YouTubeIcon />,
     },
 ];
 
-export default function SocialIcons({ className = '' }) {
+function SocialIcons() {
     return (
-        <div className={`flex space-x-6 ${className}`}>
-        {socialLinks.map((social) => (
-            <a
-            key={social.name}
-            href={social.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`text-dark-text-secondary ${social.color} transition-colors`}
-            aria-label={social.name}
-            >
-            <social.icon className="h-6 w-6" />
-            </a>
-        ))}
+        <div style={{ display: 'flex', gap: '1rem' }}>
+            {socialLinks.map((link) => (
+                <IconButton
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="primary"
+                    aria-label={link.name}
+                >
+                    {link.icon}
+                </IconButton>
+            ))}
         </div>
     );
-} 
+}
+
+export default SocialIcons; 
