@@ -27,17 +27,17 @@ const features = [
     {
         title: 'Live Streaming',
         description: 'Listen to our live radio broadcasts from across Mindanao.',
-        image: '/media/streaming.jpg',
+        image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     },
     {
         title: 'Local News',
         description: 'Stay updated with the latest news and events from Mindanao.',
-        image: '/media/news.jpg',
+        image: 'https://images.unsplash.com/photo-1557858310-9052820906f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     },
     {
         title: 'Community Voices',
         description: 'Hear stories and perspectives from the Mindanao community.',
-        image: '/media/community.jpg',
+        image: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     },
 ];
 
@@ -165,7 +165,7 @@ function Home() {
         </Box>
 
         {/* Features Section */}
-        <Section title="Why Choose Us">
+        {/* <Section title="Why Choose Us">
             <div className="grid md:grid-cols-3 gap-8">
             <div className="card group">
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">🎯</div>
@@ -189,7 +189,7 @@ function Home() {
                 </p>
             </div>
             </div>
-        </Section>
+        </Section> */}
 
         {/* About Section */}
         <div id="about" className="relative">

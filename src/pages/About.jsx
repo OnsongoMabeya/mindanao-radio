@@ -58,6 +58,42 @@ const values = [
     },
 ];
 
+const features = [
+    {
+        title: 'Professional Broadcasting',
+        description: 'State-of-the-art equipment and experienced broadcasters delivering quality content.',
+        image: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    },
+    {
+        title: 'Community Focus',
+        description: 'Deep understanding and connection with the Mindanao community.',
+        image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    },
+    {
+        title: 'Digital Innovation',
+        description: 'Embracing modern technology to enhance broadcasting experience.',
+        image: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    }
+];
+
+const teamMembers = [
+    {
+        name: 'John Doe',
+        position: 'Station Manager',
+        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80'
+    },
+    {
+        name: 'Jane Smith',
+        position: 'News Director',
+        image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1961&q=80'
+    },
+    {
+        name: 'Mike Johnson',
+        position: 'Program Director',
+        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    }
+];
+
 function About() {
     return (
         <Box sx={{ pt: 8 }}>
@@ -71,6 +107,7 @@ function About() {
             justifyContent: 'center',
             overflow: 'hidden',
             mb: 8,
+            textAlign: 'center',
             }}
         >
             <Box
@@ -80,18 +117,18 @@ function About() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundImage: 'url("/media/about-hero.jpg")',
+                backgroundImage: 'url("https://images.unsplash.com/photo-1516057747705-0609711c769b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                filter: 'brightness(0.5)',
+                filter: 'brightness(0.3)',
             }}
             />
-            <Container maxWidth="lg">
-            <Box sx={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+            <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ textAlign: 'center' }}>
                 <GradientText variant="h1" gutterBottom>
                 About Us
                 </GradientText>
-                <Typography variant="h5" color="text.secondary">
+                <Typography variant="h5" color="text.secondary" sx={{ maxWidth: '800px', margin: '0 auto' }}>
                 Your Voice in Mindanao Since 1995
                 </Typography>
             </Box>
@@ -102,7 +139,7 @@ function About() {
         <Container maxWidth="lg" sx={{ mb: 8 }}>
             <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
-                <Typography variant="h3" gutterBottom>
+                <Typography variant="h3" gutterBottom align="center">
                 Our Story
                 </Typography>
                 <Typography variant="body1" paragraph>
@@ -115,7 +152,7 @@ function About() {
             <Grid item xs={12} md={6}>
                 <Box
                 component="img"
-                src="/media/about-story.jpg"
+                src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2076&q=80"
                 alt="Our Story"
                 sx={{
                     width: '100%',
@@ -128,25 +165,34 @@ function About() {
             </Grid>
         </Container>
 
-        {/* Values Section */}
+        {/* Why Choose Us Section */}
         <Box sx={{ bgcolor: 'background.paper', py: 8 }}>
             <Container maxWidth="lg">
-            <Typography variant="h3" align="center" gutterBottom>
-                Our Values
-            </Typography>
-            <Grid container spacing={4} sx={{ mt: 4 }}>
-                {values.map((value, index) => (
-                <Grid item xs={12} sm={6} md={3} key={index}>
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
+                <Typography variant="h3" gutterBottom>
+                Why Choose Us
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ maxWidth: '800px', margin: '0 auto', mb: 4 }}>
+                Experience the difference with Mindanao's premier broadcasting station
+                </Typography>
+            </Box>
+            <Grid container spacing={4}>
+                {features.map((feature, index) => (
+                <Grid item xs={12} md={4} key={index}>
                     <GlassCard>
+                    <CardMedia
+                        component="img"
+                        height="200"
+                        image={feature.image}
+                        alt={feature.title}
+                        sx={{ mb: 2 }}
+                    />
                     <CardContent sx={{ textAlign: 'center' }}>
-                        <IconWrapper>
-                        {value.icon}
-                        </IconWrapper>
-                        <Typography variant="h6" gutterBottom>
-                        {value.title}
+                        <Typography variant="h5" gutterBottom>
+                        {feature.title}
                         </Typography>
                         <Typography color="text.secondary">
-                        {value.description}
+                        {feature.description}
                         </Typography>
                     </CardContent>
                     </GlassCard>
@@ -158,67 +204,39 @@ function About() {
 
         {/* Team Section */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
-            <Typography variant="h3" align="center" gutterBottom>
-            Our Team
+            <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Typography variant="h3" gutterBottom>
+                Our Team
             </Typography>
-            <Typography variant="body1" align="center" color="text.secondary" paragraph sx={{ mb: 6 }}>
-            Meet the dedicated professionals behind Mindanao Radio
+            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: '800px', margin: '0 auto', mb: 4 }}>
+                Meet the dedicated professionals behind Mindanao Radio
             </Typography>
+            </Box>
             <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
+            {teamMembers.map((member, index) => (
+                <Grid item xs={12} md={4} key={index}>
                 <GlassCard>
-                <CardMedia
+                    <CardMedia
                     component="img"
                     height="300"
-                    image="/media/team-1.jpg"
-                    alt="Team Member 1"
-                />
-                <CardContent>
+                    image={member.image}
+                    alt={member.name}
+                    sx={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                    }}
+                    />
+                    <CardContent sx={{ textAlign: 'center' }}>
                     <Typography variant="h6" gutterBottom>
-                    John Doe
+                        {member.name}
                     </Typography>
                     <Typography color="text.secondary">
-                    Station Manager
+                        {member.position}
                     </Typography>
-                </CardContent>
+                    </CardContent>
                 </GlassCard>
-            </Grid>
-            <Grid item xs={12} md={4}>
-                <GlassCard>
-                <CardMedia
-                    component="img"
-                    height="300"
-                    image="/media/team-2.jpg"
-                    alt="Team Member 2"
-                />
-                <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                    Jane Smith
-                    </Typography>
-                    <Typography color="text.secondary">
-                    News Director
-                    </Typography>
-                </CardContent>
-                </GlassCard>
-            </Grid>
-            <Grid item xs={12} md={4}>
-                <GlassCard>
-                <CardMedia
-                    component="img"
-                    height="300"
-                    image="/media/team-3.jpg"
-                    alt="Team Member 3"
-                />
-                <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                    Mike Johnson
-                    </Typography>
-                    <Typography color="text.secondary">
-                    Program Director
-                    </Typography>
-                </CardContent>
-                </GlassCard>
-            </Grid>
+                </Grid>
+            ))}
             </Grid>
         </Container>
         </Box>

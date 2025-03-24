@@ -7,6 +7,7 @@ import {
   Typography,
   useTheme,
   styled,
+  CircularProgress,
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -43,6 +44,8 @@ function AudioPlayer() {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const audioRef = useRef(null);
   const theme = useTheme();
 
@@ -51,29 +54,63 @@ function AudioPlayer() {
     if (audio) {
       audio.addEventListener('timeupdate', handleTimeUpdate);
       audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.addEventListener('error', handleError);
+      audio.addEventListener('canplay', handleCanPlay);
+      audio.addEventListener('waiting', () => setIsLoading(true));
+      audio.addEventListener('playing', () => setIsLoading(false));
+      
       return () => {
         audio.removeEventListener('timeupdate', handleTimeUpdate);
         audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        audio.removeEventListener('error', handleError);
+        audio.removeEventListener('canplay', handleCanPlay);
+        audio.removeEventListener('waiting', () => setIsLoading(true));
+        audio.removeEventListener('playing', () => setIsLoading(false));
       };
     }
   }, []);
 
+  const handleCanPlay = () => {
+    setError(null);
+    setIsLoading(false);
+  };
+
   const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
   };
 
   const handleLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+    }
   };
 
-  const togglePlay = () => {
+  const handleError = (e) => {
+    console.error('Audio Error:', e);
+    setError('Unable to play audio stream. Please try again later.');
+    setIsPlaying(false);
+    setIsLoading(false);
+  };
+
+  const togglePlay = async () => {
     if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
+      try {
+        setIsLoading(true);
+        if (isPlaying) {
+          await audioRef.current.pause();
+        } else {
+          await audioRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
+      } catch (err) {
+        console.error('Playback error:', err);
+        setError('Unable to play audio. Please try again.');
+        setIsPlaying(false);
+      } finally {
+        setIsLoading(false);
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -108,38 +145,48 @@ function AudioPlayer() {
     <>
       <audio
         ref={audioRef}
-        src="YOUR_AUDIO_STREAM_URL"
+        src="http://stream.zeno.fm/eezdhp4yx1zuv"
         preload="metadata"
       />
       <StyledPaper elevation={3}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <IconButton onClick={togglePlay} color="primary">
-            {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+          <IconButton 
+            onClick={togglePlay} 
+            color="primary"
+            disabled={!!error || isLoading}
+          >
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              isPlaying ? <PauseIcon /> : <PlayArrowIcon />
+            )}
           </IconButton>
           
           <Box sx={{ flex: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="body2" color="text.secondary">
-                {formatTime(currentTime)}
+            {error ? (
+              <Typography color="error" variant="body2">
+                {error}
               </Typography>
-              <StyledSlider
-                value={currentTime}
-                onChange={handleTimeChange}
-                max={duration}
-                aria-label="time-indicator"
-                size="small"
-              />
-              <Typography variant="body2" color="text.secondary">
-                {formatTime(duration)}
-              </Typography>
-            </Box>
-            <Typography variant="subtitle2" noWrap>
-              Now Playing: Mindanao Radio Live Stream
-            </Typography>
+            ) : (
+              <>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    {isLoading ? 'Loading...' : 'Live'}
+                  </Typography>
+                </Box>
+                <Typography variant="subtitle2" noWrap>
+                  Now Playing: Mindanao Radio Live Stream
+                </Typography>
+              </>
+            )}
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <IconButton onClick={toggleMute} color="primary">
+            <IconButton 
+              onClick={toggleMute} 
+              color="primary"
+              disabled={!!error}
+            >
               {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
             </IconButton>
             <StyledSlider
@@ -151,6 +198,7 @@ function AudioPlayer() {
               aria-label="volume-slider"
               size="small"
               sx={{ width: 100 }}
+              disabled={!!error}
             />
           </Box>
         </Box>
