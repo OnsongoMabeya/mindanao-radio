@@ -30,14 +30,14 @@ const contactInfo = [
     {
         icon: <LocationOnIcon sx={{ fontSize: 40 }} />,
         title: 'Address',
-        content: 'BSI, Top plaza',
-        link: 'https://maps.app.goo.gl/WeUTkatNMVqquhCN6',
+        content: 'Broadcast Solutions International, Top Plaza',
+        link: 'https://goo.gl/maps/4aa063e8c15b9664',
     },
     {
         icon: <PhoneIcon sx={{ fontSize: 40 }} />,
         title: 'Phone',
         content: '+254 (722) 434-342',
-        link: 'tel:+254 (722) 434-342',
+        link: 'tel:+254722434342',
     },
     {
         icon: <EmailIcon sx={{ fontSize: 40 }} />,
@@ -282,13 +282,13 @@ function Contact() {
         {/* Map Section */}
         <Box sx={{ height: 400, mb: 8 }}>
             <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.4146377899757!2d125.60772147507633!3d7.073095116680855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f96d7a7f4b0fb1%3A0x1c0f3f3f3f3f3f3f!2sDavao%20City%2C%20Philippines!5e0!3m2!1sen!2sph!4v1234567890!5m2!1sen!2sph"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5832.57480804798!2d36.78965791196998!3d-1.2973285356357789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f117d96f109b3%3A0x4aa063e8c15b9664!2sBroadcast%20Solutions%20International!5e1!3m2!1sen!2ske!4v1742818203010!5m2!1sen!2ske"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
             />
         </Box>
         </Box>
