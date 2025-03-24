@@ -30,14 +30,14 @@ const contactInfo = [
     {
         icon: <LocationOnIcon sx={{ fontSize: 40 }} />,
         title: 'Address',
-        content: '123 Radio Street, Davao City, Mindanao, Philippines',
-        link: 'https://maps.google.com',
+        content: 'BSI, Top plaza',
+        link: 'https://maps.app.goo.gl/WeUTkatNMVqquhCN6',
     },
     {
         icon: <PhoneIcon sx={{ fontSize: 40 }} />,
         title: 'Phone',
-        content: '+63 (82) 123-4567',
-        link: 'tel:+63821234567',
+        content: '+254 (722) 434-342',
+        link: 'tel:+254 (722) 434-342',
     },
     {
         icon: <EmailIcon sx={{ fontSize: 40 }} />,
